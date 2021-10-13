@@ -1,23 +1,26 @@
 
 void pivot_points(){
+
     int time = iTime(NULL, PERIOD_D1, 0);
-    double high = NormalizeDouble(iHigh(NULL, PERIOD_D1, 1), 2);
-    double close = NormalizeDouble(iClose(NULL, PERIOD_D1, 1), 2);
-    double low = NormalizeDouble(iLow(NULL, PERIOD_D1, 1), 2);
-    
+    double high = iHigh(NULL, PERIOD_D1, 1);
+    double close = iClose(NULL, PERIOD_D1, 1);
+    double low = iLow(NULL, PERIOD_D1, 1);
     double pivot = NormalizeDouble((high + low + close) / 3, 2);
     
     double r1 = NormalizeDouble((2 * pivot) - low, 2);
     double s1 = NormalizeDouble((2 * pivot) - high, 2);
-    double r2 = NormalizeDouble(pivot + (high - low), 2);
-    double s2 = NormalizeDouble(pivot - (high- low), 2);
     
+    double r2 = NormalizeDouble((pivot - s1) + r1, 2);
+    double s2 = NormalizeDouble(pivot - (r1 - s1), 2);
+    
+    double r3 = NormalizeDouble(high + 2 * (pivot - low), 2);
+    double s3 = NormalizeDouble(low - 2 * (high - pivot), 2);
     
     ObjectDelete(0, "PIVOT");
     ObjectCreate(0, "PIVOT", OBJ_TREND, 0, time, pivot, time+86400, pivot);
     ObjectSetInteger(0, "PIVOT", OBJPROP_RAY_RIGHT, true);
     ObjectSetInteger(0, "PIVOT", OBJPROP_STYLE, 1);
-    ObjectSetInteger(0, "PIVOT", OBJPROP_COLOR, clrDarkViolet);
+    ObjectSetInteger(0, "PIVOT", OBJPROP_COLOR, clrGold);
     ObjectSetInteger(0, "PIVOT", OBJPROP_WIDTH, 3);
     
     ObjectDelete(0, "PIVOT_LABEL");
@@ -51,6 +54,20 @@ void pivot_points(){
     ObjectSetString(0, "R2_LABEL", OBJPROP_TEXT, "R2");
     ObjectSetInteger(0, "R2_LABEL", OBJPROP_COLOR, clrViolet);
     ObjectSetInteger(0, "R2_LABEL", OBJPROP_FONTSIZE, 8);
+    
+    ObjectDelete(0, "R3");
+    ObjectCreate(0, "R3", OBJ_TREND, 0, time, r3, time+86400, r3);
+    ObjectSetInteger(0, "R3", OBJPROP_RAY_RIGHT, true);
+    ObjectSetInteger(0, "R3", OBJPROP_STYLE, 1);
+    ObjectSetInteger(0, "R3", OBJPROP_COLOR, clrDarkViolet);
+    ObjectSetInteger(0, "R3", OBJPROP_WIDTH, 3);
+    
+    ObjectDelete(0, "R3_LABEL");
+    ObjectCreate(0, "R3_LABEL", OBJ_TEXT, 0, time, r3 - 0.2);
+    ObjectSetString(0, "R3_LABEL", OBJPROP_TEXT, "R3");
+    ObjectSetInteger(0, "R3_LABEL", OBJPROP_COLOR, clrViolet);
+    ObjectSetInteger(0, "R3_LABEL", OBJPROP_FONTSIZE, 8);
+    
 
     ObjectDelete(0, "S1");
     ObjectCreate(0, "S1", OBJ_TREND, 0, time, s1, time+86400, s1);
@@ -77,6 +94,19 @@ void pivot_points(){
     ObjectSetString(0, "S2_LABEL", OBJPROP_TEXT, "S2");
     ObjectSetInteger(0, "S2_LABEL", OBJPROP_COLOR, clrViolet);
     ObjectSetInteger(0, "S2_LABEL", OBJPROP_FONTSIZE, 8);
+    
+    ObjectDelete(0, "S3");
+    ObjectCreate(0, "S3", OBJ_TREND, 0, time, s3, time+86400, s3);
+    ObjectSetInteger(0, "S3", OBJPROP_RAY_RIGHT, true);
+    ObjectSetInteger(0, "S3", OBJPROP_STYLE, 1);
+    ObjectSetInteger(0, "S3", OBJPROP_COLOR, clrDarkViolet);
+    ObjectSetInteger(0, "S3", OBJPROP_WIDTH, 3);
+    
+    ObjectDelete(0, "S3_LABEL");
+    ObjectCreate(0, "S3_LABEL", OBJ_TEXT, 0, time, s3 - 0.2);
+    ObjectSetString(0, "S3_LABEL", OBJPROP_TEXT, "S3");
+    ObjectSetInteger(0, "S3_LABEL", OBJPROP_COLOR, clrViolet);
+    ObjectSetInteger(0, "S3_LABEL", OBJPROP_FONTSIZE, 8);
 }
 
 datetime NewCandleTime = TimeCurrent();
